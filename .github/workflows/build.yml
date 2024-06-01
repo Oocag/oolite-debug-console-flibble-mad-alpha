@@ -5,10 +5,6 @@ name: build
 on:
   workflow_dispatch:
 
-permissions:
-  pull-requests: read
-  statuses: write
-
 jobs:
   semver:
     runs-on: ubuntu-latest
