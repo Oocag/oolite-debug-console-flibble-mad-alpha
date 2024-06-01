@@ -255,7 +255,7 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "v${{ needs.semver.outputs.GITVERSION_SEMVER }}"
-        prerelease: false
+        prerelease: true
         title: "Debug Console v${{ needs.semver.outputs.GITVERSION_SEMVER }}"
         files: |
           artifacts/Oolite-Debug-Console-Linux-Installable/*.tgz
