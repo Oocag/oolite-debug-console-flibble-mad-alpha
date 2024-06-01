@@ -214,7 +214,7 @@ jobs:
         find . -not -path "./oolitestarter/.git/*"
 
     - name: Remove old prereleases
-      if: github.ref != 'refs/heads/master'
+      if: github.ref != 'refs/heads/main'
       uses: dev-drprasad/delete-older-releases@v0.3.2
       with:
         #repo: <owner>/<repoName> # defaults to current repo
@@ -226,7 +226,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Prerelease
-      if: github.ref != 'refs/heads/master'
+      if: github.ref != 'refs/heads/main'
       id: create_prerelease
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -241,7 +241,7 @@ jobs:
           artifacts/Oolite-Debug-Console-MacOs/*.tgz
       
     - name: Remove old releases
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       uses: dev-drprasad/delete-older-releases@v0.3.2
       with:
         #repo: <owner>/<repoName> # defaults to current repo
@@ -253,7 +253,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create Release
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       id: create_release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
