@@ -1,5 +1,3 @@
-build.yml
-
 # This workflow will build a python project with pyinstaller
 
 name: build
