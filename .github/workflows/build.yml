@@ -93,6 +93,7 @@ jobs:
         source "${venv}"/bin/activate
         pip install pyinstaller
         pip install twisted
+        pip install click
 
     - name: Build using pyinstaller
       run: |
@@ -127,6 +128,7 @@ jobs:
         pip install -U pyinstaller
         pip install -U twisted
         pip install -U pywin32
+        pip install -U click
 
     # in Windows PowerShell the backtick indicates a multiline command
     # see https://stackoverflow.com/questions/3235850/how-to-enter-a-multi-line-command
@@ -174,6 +176,8 @@ jobs:
     - name: Install pyinstaller
       run: |
         pip install -U pyinstaller
+        pip install -U twisted
+        pip install -U click
 
     - name: Build using pyinstaller
       run: |
