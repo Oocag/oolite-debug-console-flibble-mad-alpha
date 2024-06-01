@@ -5,6 +5,14 @@ name: build
 on:
   workflow_dispatch:
 
+
+permissions:
+id-token: write
+contents: read
+pull-requests: write
+actions: read
+
+
 jobs:
   semver:
     runs-on: ubuntu-latest
