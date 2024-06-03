@@ -122,7 +122,7 @@ def cli(base,cpath,lpath,cext,lext,hext,stderr):
     if re.match("^[A-Za-z0-9_-]*$", base):
       g['base'] = base
     else:
-      raise clickBadParameter(
+      raise click.BadParameter(
         'Invalid base filename. Only A-Za-z0-9_- are accepted.\n',
         param_hint=["--base"])
 
