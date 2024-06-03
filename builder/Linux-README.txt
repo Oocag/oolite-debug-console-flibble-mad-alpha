@@ -64,20 +64,6 @@ Either way, it will go on to:
 
 install-tree
     A directory structure used to make installer tarballs.
-    Contains icon, .desktop file, and a wrapper script to make sure that
-     config files and logs end up in a sane place ($HOME/.Oolite/DebugConsole2)
-    Also a symlink to the executable that gets made by make.sh. this will be
-     dereferenced by tar when the installable tarball gets made.
-
-Why the wrapper script?
-
-The wrapper script will change directory by default to $HOME/.Oolite/OoDC
- so that config and logs are in a predictable place.
-
-To use a different directory, the environment variable OoDC_CFG_DIR can be set.
-
-For example, to use the debug console configs in $HOME/OoDev/OoDC-config1:
-
-    OoDC_CFG_DIR="$HOME/OoDev/OoDC-config1" OoDC
-
-The wrapper script will attempt to create missing directories.
+    Contains icon, .desktop file, and a symlink to the executable that gets
+     made by make.sh. this will be dereferenced by tar when the installable
+     tarball gets made.

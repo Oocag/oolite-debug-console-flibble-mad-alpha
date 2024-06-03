@@ -83,17 +83,17 @@ def loadCmdHistory(): 					# Restore CLI history from its save file
 		_cmdHistory[:] = history
 		_differsFromDisk = _trimHistory()
 
-def saveCmdHistory(): 					# write CLI history to its save file
+def saveCmdHistory(): 			# write CLI history to its save file
 	global _differsFromDisk
 	try:
 		if not _differsFromDisk:
 			# with file versioning, only write when there has been changes
 			return
 		_trimHistory()
-		fname = cfg.nextVersion(con.BASE_FNAME, con.HIST_EXT, 
-								con.MAX_HIST_VERSION)
+		fname = cfg.nextVersion(con.HIST_BASE, con.HIST_EXT, 
+						con.MAX_HIST_VERSION)
 		if not fname:
-			fname = con.BASE_FNAME + con.HIST_EXT
+			fname = con.HIST_BASE + con.HIST_EXT
 			errmsg = f'File versioning failed, overwriting {fname!r}'
 		if fname:
 			with open(fname, 'wb') as hfile:
@@ -108,7 +108,7 @@ def saveCmdHistory(): 					# write CLI history to its save file
 		errmsg = f'failed to save command history file: {exc!r}'
 		gv.debugLogger.exception(errmsg)
 
-def cmdSearchClear():					# see runCmd and cmdClear
+def cmdSearchClear():			# see runCmd and cmdClear
 	global _cmdHistoryIdx, _cmdSearchStr
 	_cmdSearchStr = None
 	_cmdHistoryIdx = -1

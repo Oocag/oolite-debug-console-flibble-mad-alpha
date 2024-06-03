@@ -1,18 +1,20 @@
 #
 # (c) 2021 cag CC BY-NC-SA 4.0
 #
-import sys
+import sys, os
 from collections import OrderedDict
+import debugGUI.cliArgs as dca
 
 # try:
 	# from sys import frozen
 	# FROZEN = True
 # except:
 	# FROZEN = False
-FROZEN = hasattr(sys, 'frozen')	## cannot test until build exe
-IS_WINDOWS_PC = sys.platform.startswith('win')
-IS_LINUX_PC = sys.platform.startswith('linux')
-IS_MACOS_PC = sys.platform.startswith('darwin')
+
+FROZEN = dca.p['f']
+IS_WINDOWS_PC =  dca.p['w']
+IS_LINUX_PC =  dca.p['l']
+IS_MACOS_PC =  dca.p['m']
 
 # Tkinter
 MINIMUM_WIDTH = 600 #MrFlibble set 600x400 to allow for old netbooks.
@@ -45,33 +47,43 @@ DEBUGGER_TITLE = 'Oolite - Javascript Debug Console ({})'.format(
 CONNECTMSG = "Please (re)start Oolite in order to connect."
 
 # files
-BASE_FNAME = 'OoDC'
-CFG_EXT = '.cfg'
-HIST_EXT = '.dat'
-LOG_EXT = '.log'
-HISTFILE = BASE_FNAME + HIST_EXT
-LOGFILE = BASE_FNAME + LOG_EXT
+#BASE_FNAME = 'OoDC'
+#CFG_EXT = '.cfg'
+#HIST_EXT = '.dat'
+#LOG_EXT = '.log'
+BASE_FNAME = dca.g['base']
+CFG_EXT = '.' + dca.g['cext']
+HIST_EXT = '.' + dca.g['hext']
+LOG_EXT = '.' + dca.g['lext']
+
+LOG_PATH = dca.g['lpath']
+CFG_PATH = dca.g['cpath']
+LOG_STDERR = dca.g['stderr']
+
+CFG_BASE = os.path.join ( CFG_PATH, BASE_FNAME )
+HIST_BASE = os.path.join ( LOG_PATH, BASE_FNAME )
+LOG_BASE = os.path.join ( LOG_PATH, BASE_FNAME )
+
+CFGFILE = CFG_BASE + CFG_EXT 
+HISTFILE = HIST_BASE + HIST_EXT
+LOGFILE = LOG_BASE + LOG_EXT
+
 MAX_HIST_VERSION = 5
 MAX_CFG_VERSION = 5
 MAX_LOG_VERSION = 5
 MAX_HIST_CMDS = 200
 MAX_HIST_SIZE = MAX_HIST_CMDS * 1000
-# if we're using the compiled version, it's ODC.cfg 
-# rather than DebugConsole.cfg
-#if FROZEN: BASE_FNAME = 'Oo' + BASE_FNAME # removed for consistant behaviour
-CFGFILE = BASE_FNAME + CFG_EXT
-
 # file find
 PATH_STRIP_CHARS = ' \'"'
 CHECKED = 'X'
 UNCHECKED = ' '
 NO_SELECTION = '<empty>'
 DEFAULT_INCL = ('*.js', '*.plist', '*.txt', '*.js, *.zip',
-				'*.js, *.plist', '*.js, *.txt', '*.plist, *.txt'
-				'*.js; *.plist; *.txt')
+		'*.js, *.plist', '*.js, *.txt', '*.plist, *.txt'
+		'*.js; *.plist; *.txt')
 DEFAULT_EXCL = ('*.dat; *.fragment, *.vertex', '.mtl .obj',
-				'Oolite_Readme.txt', 'oolite.app/', '*.oolite-save',
-				'*.pdf *.rtf', 'Resources/', '.zip',)
+		'Oolite_Readme.txt', 'oolite.app/', '*.oolite-save',
+		'*.pdf *.rtf', 'Resources/', '.zip',)
 
 # config file
 CFG_TAB_LENGTH = 4
@@ -1076,5 +1088,5 @@ toolTips = {
 		'one does.  When you add/edit a tooltip, toggle this to rebuild the button.',
 }
 
-import os
-CAGSPC = os.path.exists(r'C:\Users\cag')
+#CAGSPC = os.path.exists(r'C:\Users\cag')
+CAGSPC = True

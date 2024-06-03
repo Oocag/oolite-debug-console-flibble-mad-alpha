@@ -780,7 +780,7 @@ def writeCfgFile(saveNow=False):
 			rpt += obj.defn
 			rpt += '' if rpt.endswith(con.NL) else con.NL
 
-	fname = nextVersion(con.BASE_FNAME, con.CFG_EXT, con.MAX_CFG_VERSION)
+	fname = nextVersion(con.CFG_BASE, con.CFG_EXT, con.MAX_CFG_VERSION)
 	if not fname:
 		fname = con.CFGFILE
 		msg = f'File versioning failed, overwriting {fname!r}'

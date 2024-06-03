@@ -14,16 +14,15 @@
 A gui implementation of the Oolite JavaScript debug console interface.
 """
 
-__author__	= "Jens Ayton <jens@ayton.se>, Kaks, cag"
-#__version__	= "3.00-alpha"
-from _version import __version__
+__author__ = "Jens Ayton <jens@ayton.se>, Kaks, cag"
 
+from debugGUI._version import __version__
 
-# Do command line arg before bothering to import anything else.
-import OoDCopts
-print(str(OoDCopts.exec()))
-# Done. Unload it.
-#del OoDCopts
+# The CLI args will get imported by constants.
+#  so it MUST be above as early as possible to
+#  avoid being imported elsewhere first.
+# Also this avoids pointless imports if args are nuts.
+import debugGUI.constants as con
 
 import sys, os, time, logging, errno, gc
 
@@ -49,12 +48,11 @@ import debugGUI.buildApp as ba
 import debugGUI.cmdHistory as ch
 import debugGUI.colors as cl
 import debugGUI.comments as cmt
-import debugGUI.constants as con
 import debugGUI.config as cfg
 import debugGUI.debugMenu as dm
 # import debugGUI.findFile as ff
 import debugGUI.fontMenu as fm
-import debugGUI.globalVars as gv  
+import debugGUI.globalVars as gv
 import debugGUI.miscUtils as mu
 # import debugGUI.optionsMenu as om
 import debugGUI.plistMenu as pm
@@ -63,12 +61,14 @@ import debugGUI.stringUtils as su
 # import debugGUI.style as st
 import debugGUI.widgets as wg
 
+
+
 ## module variables ###########################################################
 
 if con.IS_WINDOWS_PC and sys.executable.endswith('pythonw.exe'):
 	sys.stdout = open(os.devnull, 'w')
 	sys.stderr = open(os.path.join(os.getcwd(),
-						'stderr-' + os.path.basename(sys.argv[0])), 'w')
+		'stderr-' + os.path.basename(sys.argv[0])), 'w')
 
 # network
 _consoleHandler = None
@@ -439,7 +439,7 @@ class AppWindow(ttk.Frame):
 				errmsg = f'aborting "{label}"(elapsed = {elapsed})'
 				gv.debugLogger.debug(errmsg)
 				del gv.timedOutCmds[label]
-			else:						
+			else:
 				# give it more time
 				errmsg = f'giving "{label}" more time (elapsed = {elapsed})'
 				gv.debugLogger.debug(errmsg)
@@ -482,7 +482,7 @@ class AppWindow(ttk.Frame):
 		au.afterLoop(gv.tkTiming['lazy'], 'sendSilentCmd',self.sendSilentCmd)
 		if gv.pollingSuspended:
 			return
-		if len(gv.pendingMessages) > 0:				
+		if len(gv.pendingMessages) > 0:
 			# don't interfere w/ large outputs
 			return
 		if not gv.replyPending and len(gv.requests):
@@ -683,23 +683,23 @@ class AppWindow(ttk.Frame):
 
 	messageBatchSize = 25
 	# messageQueueID = None
-	def processMessages(self):			
+	def processMessages(self):
 		# deal with queued messages from Oolite
 		debugStatus = message = colorKey = emphasisRanges = None
 		try:
 			pending = len(gv.pendingMessages)
 			numMsgs = min(self.messageBatchSize, pending)
 			au.removeAfter('processMessages')
-			if numMsgs == 0:				
+			if numMsgs == 0:
 				# no messages to process
 				au.afterLoop(gv.tkTiming['lazy'], 'processMessages', 
 							self.processMessages)
 				return
-			if pending > numMsgs:			
+			if pending > numMsgs:
 				# more than can be processed in one call
 				au.afterLoop(gv.tkTiming['fast'], 'processMessages', 
 							self.processMessages)
-			else:							
+			else:
 				# expect to process all this call (see below)
 				au.afterLoop(gv.tkTiming['lazy'], 'processMessages', 
 							self.processMessages)
@@ -714,7 +714,7 @@ class AppWindow(ttk.Frame):
 				# runs sessionCleanup, which calls this fn/iife ...
 				#   ie. inadvertent recursion by Tk trace! 
 				elapsed = (mu.timeCount() - startTime) * 1000
-				if elapsed >= 8:  		
+				if elapsed >= 8:
 					# spent too much time processing, next call is done
 					# quickly (8 ms is Oolite retry wait time)
 					if con.CAGSPC:
@@ -723,7 +723,7 @@ class AppWindow(ttk.Frame):
 						print('  pending ({}):\n  {}'.format(len(gv.pendingMessages),
 								'\n  '.join(f'{pend[1]}: {pend[0][:100]}'
 										  for pend in gv.pendingMessages)))
-					au.afterLoop(gv.tkTiming['fast'], 'processMessages', 
+					au.afterLoop(gv.tkTiming['fast'], 'processMessages',
 								self.processMessages)
 					break
 				debugStatus = None
@@ -746,33 +746,33 @@ class AppWindow(ttk.Frame):
 					msgLabel, discard = msgTag['label'], msgTag['discard']
 					msgTagStart = msgTag.start('msglabel')
 
-				if msgLabel is None:		
+				if msgLabel is None:
 					# must be part of a USER_CMD or its reply
 					isEcho = message.startswith('_ ')
-					if isEcho:				
+					if isEcho:
 						# multi-line user commands get echoed w/ '_ ' prefix
 						if pm.suspendMenu is None:
 							# first time we know it's multi-line
 							pm.suspendMsgTraffic()
-					elif gv.pollingSuspended:	
+					elif gv.pollingSuspended:
 						# no '_ ' prefix => user cmd reply
 						# user cmd ends, release queue for internal ones
 						pm.restoreMsgTraffic()
-					if gv.pollingSuspended or message != '> ': 
+					if gv.pollingSuspended or message != '> ':
 						# suppress trailing '>' line
-						self.colorPrint(message, colorKey, emphasisRanges, 
+						self.colorPrint(message, colorKey, emphasisRanges,
 										lastInBatch=True)
 					debugStatus = 'printed'
 					break
 
-				if colorKey == 'command':	
+				if colorKey == 'command':
 					# never echo internal commands
 					debugStatus = 'printed'
 					continue
 
 				# internal commands always get a reply, though it may be 
 				# 'no result' (done for firm control of traffic)
-				if not gv.replyPending or gv.replyPending.label != msgLabel:	
+				if not gv.replyPending or gv.replyPending.label != msgLabel:
 					# unexpected reply
 					if discard != 'yes':
 						self.colorPrint(message, colorKey, emphasisRanges)
@@ -1235,16 +1235,16 @@ class AppWindow(ttk.Frame):
 def _initLogger():
 	try:
 		# set up logging to file
-		nextVer = cfg.nextVersion(con.BASE_FNAME, con.LOG_EXT)
+		nextVer = cfg.nextVersion(con.LOG_BASE, con.LOG_EXT)
 		if not nextVer:
-			nextVer = con.BASE_FNAME + con.LOG_EXT
+			nextVer = (con.LOG_BASE + con.LOG_EXT)
 			errmsg = '_initLogger, file versioning failed, '
 			errmsg += f'overwriting {nextVer!r}'
 			gv.startUpInfo['error'].append(errmsg)
 		fStr = '%(asctime)s %(levelname)-8s %(message)s '
 		fStr += '(%(filename)s: %(funcName)s, line %(lineno)s)'
 		logging.basicConfig(level=logging.WARNING, filename=nextVer, 
-							filemode='w',format=fStr)
+						filemode='w',format=fStr)
 		if con.FROZEN or not sys.stdout.isatty():
 			# handler for WARNING messages or higher to debug console
 			handler = OoDebugConsoleHandler()
@@ -1258,19 +1258,19 @@ def _initLogger():
 		handler.setFormatter(formatter)
 		logger = logging.getLogger('DebugConsole')
 		# activate debug logger output
-		logger.setLevel(logging.WARNING)      		
+		logger.setLevel(logging.WARNING)
 		# add the handler to the root logger
 		logger.addHandler(handler)
 		# 4 speed optimizations
-		logger._srcfile = None						
+		logger._srcfile = None
 		logger.logThreads = 0
 		logger.logProcesses = 0	
 		logger.logMultiprocessing = 0
 		if not con.CAGSPC and (con.FROZEN or not sys.stdout.isatty()):
 			# consider all prints as debug information
-			logger.write = logger.debug				
+			logger.write = logger.debug
 			# this may be called when printing
-			logger.flush = lambda: None				
+			logger.flush = lambda: None
 			sys.stdout = logger
 			sys.stderr = logger
 		elif con.CAGSPC:
