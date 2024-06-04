@@ -116,7 +116,7 @@ def cli(base,cpath,lpath,cext,lext,hext,stderr):
 
   #Parse dirs. Use defaults if not in cli args.
   isDir(g['cpath'],'cpath') if cpath is None else isDir(cpath,'cpath') 
-  isDir(g['lpath'],'cpath') if lpath is None else isDir(lpath,'lpath')
+  isDir(g['lpath'],'lpath') if lpath is None else isDir(lpath,'lpath')
 
   if base is not None:
     if re.match("^[A-Za-z0-9_-]*$", base):
