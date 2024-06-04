@@ -118,17 +118,14 @@ def initConfig():						# initialize config dict with defaults
 
 	try:
 		gv.CurrentOptions = OrderedDict((key, OrderedDict()) \
-								for key in con.defaultConfig.keys())
+				for key in con.defaultConfig.keys())
 		# need Settings, Font & Colors to make widgets if no CFGFILE
 		_setDefaultConfig(gv.CurrentOptions)
 		gv.aliases = gv.CurrentOptions['Aliases']
+		# in case of an error reading .cfg or a user deletes a section heading!
+		_setDefaultConfig(gv.ConfigFile, mkObj=True)
+		_writingCfg = not _readCfgFile()
 
-		if not _readCfgFile():	
-			# # fake it, as _getAppsCfg expects CFGFILE
-			_setDefaultConfig(gv.ConfigFile, mkObj=True)
-			# insert all con.defaultComments
-			# - this time only? until first save when read succeeds
-			_writingCfg = True
 	except OSError as exc:
 		if exc.errno == errno.ENOENT:
 			errmsg = 'No configuration file found'
