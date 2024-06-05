@@ -67,7 +67,7 @@ jobs:
         ./make.sh debdeps
         ./make.sh dist Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable /tmp
         mkdir /tmp/dist
-        mv build/install-tree-onefile/bin/tmp/dist
+        mv build/install-tree-onefile/bin/OoDC /tmp/dist
         tar -C /tmp -czf Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux.tgz dist
 
     - uses: actions/upload-artifact@v4
