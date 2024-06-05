@@ -1,1 +1,1 @@
-__version__ = "3.0.0-alpha-006"
+__version__ = "3.0.0-alpha-007-wip"

@@ -6,64 +6,53 @@ It is aimed at Debian/Ubuntu systems.
 
 It may work on other dists if the requirements are met and using 'nocheck'.
 
-
 Short version:
 
-    tar -xpzf Linux.tar
-    cd Linux
-    ./make.sh
+First, On Debian systems, we can check/install dependencies.
 
-Test:
+    ./make.sh debdeps
 
-    ./OoDC
+Then, make the tarball in fastest mode.
 
-If rebuilding for any reason, delete the build directory.
+    ./make.sh onedir
+
 
 To install to .local in a home directory:
 
-    tar -C $HOME/.local/ -xpzf OoDC-*-linux-installable.tar.gz
+    tar -C $HOME/.local/ -xpzf OoDC-*-linux-installable-onedir.tar.gz
+
+If rebuilding for any reason, delete the build directory.
+
+    ./make.sh clean
+
 
 Detailed info:
 
-Unpack the Linux.tar.gz in this folder.
-The path relative to the what it's building is important due to symlinks.
+The script needs to be in the build tree at ./Linux/make.sh
 
-    tar -xpzf Linux.tar.gz
+It expects to be executed in that directory.
 
-This will create a directory "Linux", containing:-
+If run as:_
 
-    make.sh install-tree
+    ./make.sh debdeps
 
-make.sh is the script used to make the executable from the python source.
+To build onedir version, which runs the fastest.
 
-If run in the Linux directory as
+    ./make.sh onedir
 
-    ./make.sh
+To build onefile version, which runs the slowest, but is arguably tidier.
 
-The script will initially run apt install for packages it depends on.
+    ./make.sh onefile
 
-    apt install python3-tk python3-pip python3-venv binutils
+Other args, clean (remove build dir), dist, build both onefile and onedir.
 
-For most users, this will involve a prompt to authenticate.
+Any arg2 will be used as the base name for the tarball. Take care!
 
-After the first run (or if you know the packages are already installed),
- this step can be skipped by running the script with nocheck as an arg1:
-
-    ./make.sh nocheck
-
-Any other arg1 will be used as the output name for the tarball. Take care!
-
-Either way, it will go on to:
+In either of the build modes, it will:
     Create a "build" directory.
     Create a python3 venv in it.
     Activate the venv.
     Use pip inside the venv to install python dependencies and pyinstaller.
     Compile an executable of the project.
-    Move the executable into the current (Linux) directory for quick testing.
     Make an installable tarball.
 
-install-tree
-    A directory structure used to make installer tarballs.
-    Contains icon, .desktop file, and a symlink to the executable that gets
-     made by make.sh. this will be dereferenced by tar when the installable
-     tarball gets made.

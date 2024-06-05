@@ -60,17 +60,23 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: make installable tarball
+    - name: make installable tarballs
       run: |
         cd builder
         tar -xpf Linux.tar.gz
         cd Linux
-        ./make.sh /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable.tgz
+        ./make.sh debdeps
+        ./make.sh dist /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable
 
     - uses: actions/upload-artifact@v4
       with:
-        name: Oolite-Debug-Console-Linux-Installable
-        path: /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable.tgz
+        name: Oolite-Debug-Console-Linux-Installable-onedir
+        path: /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable-onedir.tgz
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Oolite-Debug-Console-Linux-Installable-onefile
+        path: /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable-onefile.tgz
 
   
 
