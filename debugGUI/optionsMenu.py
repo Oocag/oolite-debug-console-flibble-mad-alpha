@@ -166,7 +166,7 @@ def _setOptionFromCheckButton(varName, tkVar):
 		written = cfg.writeCfgFile(saveNow=True)
 		gv.localOptnVars[varName].set(0)
 		if written:
-			dest = os.path.join(os.getcwd(), con.CFGFILE).replace(os.sep, '/')
+			dest = os.path.join(os.getcwd(), con.CFGFILE).replace(os.sep, '/') # DOES THIS EVER RUN?
 			msg = f'configuration settings saved to   {dest}'
 		else:
 			msg = 'configuration not written as nothing has been changed'

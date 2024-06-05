@@ -5,12 +5,6 @@ import sys, os
 from collections import OrderedDict
 import debugGUI.cliArgs as dca
 
-# try:
-	# from sys import frozen
-	# FROZEN = True
-# except:
-	# FROZEN = False
-
 FROZEN = dca.p['f']
 IS_WINDOWS_PC =  dca.p['w']
 IS_LINUX_PC =  dca.p['l']

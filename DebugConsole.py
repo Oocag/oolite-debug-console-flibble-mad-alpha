@@ -26,6 +26,13 @@ import debugGUI.constants as con
 
 import sys, os, time, logging, errno, gc
 
+#As we have parsed the command line, and dragged in constants, we know the OS
+# and if not frozen, knowing the path will allow us to find our icons.
+#from pathlib import Path
+if not con.FROZEN:
+	#Get script path (dereferenced in case symlink).
+	con.SCRIPTPATH = os.path.dirname(os.path.realpath(__file__))
+
 import pdb, traceback
 
 import tkinter as tk
@@ -73,7 +80,7 @@ if con.IS_WINDOWS_PC and sys.executable.endswith('pythonw.exe'):
 # network
 _consoleHandler = None
 # new in debugConsole ver. 1.6
-connectPort = None	
+connectPort = None
 connectEndPort = None
 clientAddress = None
 
@@ -239,7 +246,6 @@ class AppWindow(ttk.Frame):
 		gv.menubar = ttk.Frame(top, name=mu.TkName('menubar'))
 		ttk.Frame.__init__(self, top, name=mu.TkName('appFrame'))
 		iconFile = 'OoJSC256x256.png' if con.IS_LINUX_PC else 'OoJSC.ico'
-		iconPath = os.path.join(os.getcwd(), iconFile)
 
 		if con.FROZEN:
 			meipass = None
@@ -251,6 +257,9 @@ class AppWindow(ttk.Frame):
 				meipass = os.environ['_MEIPASS2']
 			if meipass:
 				iconPath = os.path.join(meipass, iconFile)
+		else:
+			iconPath = os.path.join(con.SCRIPTPATH, iconFile)
+
 
 		# Under Windows, the DEFAULT parameter can be used to set the icon
 		# for the widget and any descendants that don't have an icon set
