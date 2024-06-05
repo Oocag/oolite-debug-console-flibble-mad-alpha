@@ -66,9 +66,6 @@ jobs:
         cd Linux
         ./make.sh debdeps
         ./make.sh dist Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable /tmp
-        mkdir /tmp/dist
-        mv build/install-tree-onefile/bin/OoDC /tmp/dist
-        tar -C /tmp -czf Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux.tgz dist
 
     - uses: actions/upload-artifact@v4
       with:
@@ -79,11 +76,6 @@ jobs:
       with:
         name: Oolite-Debug-Console-Linux-Installable-onefile
         path: /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable-onefile.tgz
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Oolite-Debug-Console-Ubuntu
-        path: ./Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux.tgz
   
 
   package-windows:
@@ -209,7 +201,6 @@ jobs:
         files: |
           artifacts/Oolite-Debug-Console-Linux-Installable-onedir/*.tgz
           artifacts/Oolite-Debug-Console-Linux-Installable-onefile/*.tgz
-          artifacts/Oolite-Debug-Console-Ubuntu/*.tgz
           artifacts/Oolite-Debug-Console-Windows/*.zip
           artifacts/Oolite-Debug-Console-MacOs/*.tgz
       
@@ -237,7 +228,6 @@ jobs:
         files: |
           artifacts/Oolite-Debug-Console-Linux-Installable-onedir/*.tgz
           artifacts/Oolite-Debug-Console-Linux-Installable-onefile/*.tgz
-          artifacts/Oolite-Debug-Console-Ubuntu/*.tgz
           artifacts/Oolite-Debug-Console-Windows/*.zip
           artifacts/Oolite-Debug-Console-MacOs/*.tgz
 
