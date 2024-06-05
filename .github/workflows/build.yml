@@ -63,7 +63,6 @@ jobs:
     - name: make installable tarballs
       run: |
         cd builder
-        tar -xpf Linux.tar.gz
         cd Linux
         ./make.sh debdeps
         ./make.sh dist /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable
