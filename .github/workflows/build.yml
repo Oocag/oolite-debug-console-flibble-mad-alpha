@@ -65,7 +65,7 @@ jobs:
         cd builder
         cd Linux
         ./make.sh debdeps
-        ./make.sh dist /tmp/Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable
+        ./make.sh dist Oolite-Debug-Console-${{ needs.semver.outputs.GITVERSION_SEMVER }}-linux-installable /tmp
 
     - uses: actions/upload-artifact@v4
       with:

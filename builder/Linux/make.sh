@@ -6,6 +6,9 @@ q(){ echo "Error at: $*" >&2 ; exit 5 ; } # exit function
 #Do apt installs. Only needed on first run.
 #To not do this, simply call this script with arg 1 of: nocheck
 
+alttarbase="$2"
+alttardir="$3"
+
 debdeps(){
   step="package install"
   sudo apt install python3-tk python3-pip python3-venv binutils || q "$step"
@@ -60,9 +63,9 @@ from _version import __version__
 print(__version__)
 " | python) && cd - || q "error ascertaining version"
  [ "x$ver" = "x" ] && q "version not found. version file empty or absent"
- [ "x$1" != "x" ] && localtarbase="$1" || \
- localtarbase="${basename}-$ver-linux_installable"
-  # to use different tarball basename, use arg 2. Not sanitised
+ [ "x$alttarbase" != "x" ] && tarbase="$alttarbase" || tarbase="${basename}-$ver-linux_installable"
+ [ "x$alttardir" != "x" ] && tardir="$alttardir" || tardir="$basedir"
+ mkdir -p "$tardir" || q "could not create dir '$tardir' to house tarballs"
 }
 
 commonparts(){
@@ -87,9 +90,9 @@ pyinstaller --name "$basename" --onefile "${relpath}$inscript" \
  --add-binary "${relpath}oojsc.xbm:." --add-binary "${relpath}OoJSC.ico:." \
  --add-binary "${relpath}OoJSC256x256.png:." &&
 mv "dist/$basename" "${onefilebase}"/bin &&
-tarname="$localtarbase-onefile.tgz"
+tarname="$tarbase-onefile.tgz"
 tar -C "$builddir/$onefilebase" --numeric-owner --dereference \
- -cpzf "$basedir/$tarname" . || q "$failed $step"
+ -cpzf "$tardir/$tarname" . || q "$failed $step"
 echo "
 Finished $step.
 
@@ -97,7 +100,7 @@ To test the executable run:
 
  ./$builddirname/bin/$basename
 
-An install tarball is at '$tarname'.
+An install tarball is at '$tardir/$tarname'.
 To install it as a user-local install, extract it in \$HOME/.local
 
 example:-
@@ -126,16 +129,16 @@ pyinstaller --name "$basename" --onedir "${relpath}$inscript" \
  --add-binary "${relpath}OoJSC256x256.png:." &&
 mv "dist/$basename" $onedirbase/lib &&
 cd $onedirbase/bin && ln -s ../lib/$basename/$basename && cd -
-tarname="$localtarbase-onedir.tgz"
+tarname="$tarbase-onedir.tgz"
 tar -C "$builddir/$onedirbase" --numeric-owner \
- -cpzf "$basedir/$tarname" . || q "$failed $step"
+ -cpzf "$tardir/$tarname" . || q "$failed $step"
 echo "
 Finished $step.
 
 To test the executable run:
  ./$builddirname/$onedirbase/bin/$basename
 
-An install tarball is at '$tarname'.
+An install tarball is at '$tardir/$tarname'.
 To install it as a user-local install, extract it in \$HOME/.local
 
 example:-
@@ -154,9 +157,9 @@ If it's installed user-local, that install will (for that user) take priority ov
 case "$1" in
     debdeps) debdeps ;; # install dependencies
     clean) cleaner ;; # remove build directory
-    onefile) setupvars $2 && onefile ;;
-    dist) cleaner && setupvars $2 && onedir rm -Rf build/build && onefile ;;
-    onedir) setupvars $2 && onedir ;;
+    onefile) setupvars && onefile ;;
+    dist) cleaner && setupvars && onedir rm -Rf build/build && onefile ;;
+    onedir) setupvars && onedir ;;
     *) q "Setup: Invalid arg 1: [debdeps|onefile|onedir|clean|dist]" ;;
 esac
 

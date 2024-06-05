@@ -47,6 +47,7 @@ To build onefile version, which runs the slowest, but is arguably tidier.
 Other args, clean (remove build dir), dist, build both onefile and onedir.
 
 Any arg2 will be used as the base name for the tarball. Take care!
+Any arg3 will be used as a destination directory for the tarballs.
 
 In either of the build modes, it will:
     Create a "build" directory.
