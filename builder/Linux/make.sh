@@ -158,7 +158,7 @@ case "$1" in
     debdeps) debdeps ;; # install dependencies
     clean) cleaner ;; # remove build directory
     onefile) setupvars && onefile ;;
-    dist) cleaner && setupvars && onedir rm -Rf build/build && onefile ;;
+    dist) cleaner && setupvars && onedir rm -Rf build/build && setupvars && onefile ;;
     onedir) setupvars && onedir ;;
     *) q "Setup: Invalid arg 1: [debdeps|onefile|onedir|clean|dist]" ;;
 esac
