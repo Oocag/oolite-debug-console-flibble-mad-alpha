@@ -136,7 +136,7 @@ echo "
 Finished $step.
 
 To test the executable run:
- ./$builddirname/$onedirbase/bin/$basename
+ ./$builddirname/$onedirbase/lib/$basename/$basename
 
 An install tarball is at '$tardir/$tarname'.
 To install it as a user-local install, extract it in \$HOME/.local
