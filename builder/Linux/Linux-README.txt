@@ -1,10 +1,9 @@
-
 This will build an app tarball, with an executable that will work where python
  is unavailable.
 
 It is aimed at Debian/Ubuntu systems.
 
-It may work on other dists if the requirements are met and using 'nocheck'.
+It should work on other dists if the requirements are met.
 
 Short version:
 
