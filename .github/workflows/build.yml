@@ -141,6 +141,7 @@ jobs:
       run: |
         pip install -U pyinstaller
         pip install -U twisted
+        pip install -U pillow
         pip install -U click
 
     - name: Build using pyinstaller
@@ -149,6 +150,7 @@ jobs:
         --onefile \
         --add-binary "oojsc.xbm:." \
         --add-binary "OoJSC.ico:." \
+        --icon OoJSC.ico \
         DebugConsole.py
 
     - name: create archive
