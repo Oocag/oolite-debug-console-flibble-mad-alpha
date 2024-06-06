@@ -159,6 +159,7 @@ case "$1" in
     clean) cleaner ;; # remove build directory
     onefile) setupvars && onefile ;;
     dist) cleaner && setupvars && onedir rm -Rf build/build && setupvars && onefile ;;
+    desktop) echo "$desktop" ;;
     onedir) setupvars && onedir ;;
     *) q "Setup: Invalid arg 1: [debdeps|onefile|onedir|clean|dist]" ;;
 esac

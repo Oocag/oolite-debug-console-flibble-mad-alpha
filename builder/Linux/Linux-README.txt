@@ -57,3 +57,7 @@ In either of the build modes, it will:
     Compile an executable of the project.
     Make an installable tarball.
 
+One other option, "desktop", will emit the content for a .desktop file.
+This may be of use to anyone wanting to add a shebang line (#!/bin/env python3)
+ into the source to execute it directly where requirements are satisfied.
+    ./make desktop
