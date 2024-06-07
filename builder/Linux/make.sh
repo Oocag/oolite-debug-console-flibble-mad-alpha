@@ -98,7 +98,7 @@ Finished $step.
 
 To test the executable run:
 
- ./$builddirname/bin/$basename
+ ./$builddirname/$onefilebase/bin/$basename
 
 An install tarball is at '$tardir/$tarname'.
 To install it as a user-local install, extract it in \$HOME/.local
