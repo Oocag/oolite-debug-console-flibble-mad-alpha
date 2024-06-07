@@ -27,7 +27,7 @@ cd "$basedir" || q "Can't cd to $basedir"
 builddirname=build
 builddir="$basedir/$builddirname" # this can be deleted to retry a build
 basename=OoDC # gets used a lot
-inscript=DebugConsole.py # the name of the script we'll be 'compiling'
+inscript=$basename.py # the name of the script we'll be 'compiling'
 venv="$builddir/pyinstaller"
 relpath="../../../"
 
