@@ -150,9 +150,9 @@ IIFE_PROPERTY_TAG = '_$_'
 
 ## color data #################################################################
 
-# when searching either _TKCOLORS or _OOCOLORS, all 3 primary colors being 
-# within this amount is considered a match
-COLOR_TOLERANCE = 8
+# Flibble removed COLOR_TOLERANCE as it was making it
+#  impossible to pick arbitrary colours.
+
 
 TKCOLORS = {
 	'AliceBlue':    		'#f0f8ff',    'alice blue': '#f0f8ff',
@@ -665,7 +665,7 @@ OOCOLORS = {
 	'lightGrayColor':	'#2a2a2a',
 	'whiteColor':		'#ffffff',
 	'grayColor':		'#808080',
-	'redColor':			'#ff0000',
+	'redColor':		'#ff0000',
 	'greenColor':		'#00ff00',
 	'blueColor':		'#0000ff',
 	'cyanColor':		'#00ffff',
