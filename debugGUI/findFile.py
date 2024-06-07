@@ -7,6 +7,7 @@ import zipfile
 import locale
 import gc
 import re
+import codecs
 from fnmatch import fnmatch
 from operator import itemgetter
 

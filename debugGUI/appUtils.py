@@ -16,7 +16,7 @@ def report_callback_exception(*args): 	# replacement for Tk's
 	# NLs included in returned list of strings
 	errmsg = ''.join(traceback.format_exc())
 	wg.OoInfoBox(gv.root, errmsg,
-				 label=repr(args[0]) if args else None, error=True) // tmp4test
+				 label=repr(args[0]) if args else None, error=True) # tmp4test
 	if con.CAGSPC:
 		if args:
 			print('args:', args)

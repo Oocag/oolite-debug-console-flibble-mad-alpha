@@ -1,0 +1,20 @@
+# Windows cruft
+Thumbs.db
+ehthumbs.db
+
+# Mac OS X cruft
+.DS_Store
+Icon?
+
+# Python cruft
+*.pyc
+*.pyo
+*/__pycache__/
+
+# pyinstaller cruft
+*.spec
+build/
+dist/
+
+# VS code
+launch.json

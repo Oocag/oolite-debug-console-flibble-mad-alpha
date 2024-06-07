@@ -41,8 +41,11 @@ p = dict (
 # set up globals with sane defaults using same names as click
 g = dict(
   base = "OoDC",
-  cpath = os.path.join(Path.home().as_posix(), '.OoDC/Configs'),
-  lpath = os.path.join(Path.home().as_posix(), '.OoDC/Logs'),
+  # cpath = os.path.join(Path.home().as_posix(), '.OoDC/Configs'),
+  # - this resulted in mixed usage of '/' & '\' in path displayed in help
+  # => if OK on Linux, can delete/modify this comment
+  cpath = str(Path.home() / '.OoDC/Configs'),
+  lpath = str(Path.home() / '.OoDC/Logs'),
   cext = 'cfg',
   hext = 'dat',
   lext = 'log',
