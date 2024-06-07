@@ -48,8 +48,8 @@ def buildGUI():
 	bm.createBitmaps()
 	style = st.initStyle()
 	gv.appearance = gv.Appearance(style,
-								  st.updateStyle, cl.updateAppColors,
-								  cl.setMenuColors, cl.setPopupColors)
+				st.updateStyle, cl.updateAppColors,
+				cl.setMenuColors, cl.setPopupColors)
 	gv.appearance.updateTkOptionDb()
 
 	# gv.menubar = tk.Menu(gv.root)	# create a toplevel menu
@@ -111,9 +111,9 @@ def buildGUI():
 
 	# restore saved window positions 
 	gv.popupWindows = dict(zip(_popupWindows,
-							[gv.aliasWindow, gv.grepWindow,
-							 gv.bodyText.popup, gv.cmdLine.popup, 
-							 gv.aliasDefn.popup, gv.contextText.popup]))
+				[gv.aliasWindow, gv.grepWindow,
+				 gv.bodyText.popup, gv.cmdLine.popup, 
+				 gv.aliasDefn.popup, gv.contextText.popup]))
 	# - last 4 are for search windows, shared amongst ScrollingText
 
 	for name, tkEnt in gv.popupWindows.items():
@@ -128,7 +128,7 @@ def buildGUI():
 			if geom:
 				width, height, xOffset, yOffset = au.fitToMonitors(geom)
 				history[name] = '{}x{}+{}+{}'.format(width, height,
-													 xOffset, yOffset)
+				xOffset, yOffset)
 
 	# building complete, initialize sash vertical position
 	au.positionAppSash(settings.get('SashOffset'), init=True)
@@ -153,22 +153,22 @@ def _configTextFonts():
 
 def _createWindows():
 	gv.appWindow = ttk.PanedWindow(gv.app, orient='vertical',
-								name=mu.TkName('paned'))
+				name=mu.TkName('paned'))
 	_textStyle.update({'font': 		gv.OoFonts['default'],
-					'disabledFont': gv.OoFonts['disabled']})
+				'disabledFont': gv.OoFonts['disabled']})
 	# main display
 	bodyText = wg.ScrollingText(gv.appWindow, name=mu.TkName('bodyText'),
-								searchPrefix='Output', 
-								editable=False, **_textStyle)
+				searchPrefix='Output', 
+				editable=False, **_textStyle)
 	gv.bodyText = bodyText
 	gv.textWidgets.append(bodyText)
 	# command window
 	cmdFrame = ttk.Frame(gv.appWindow, name=mu.TkName('cmdFrame'))
 	cmdLine = wg.ScrollingText(cmdFrame, name=mu.TkName('cmdLine'),
-								searchPrefix='Command', 
-								histCmd=ch.deleteCurrentCmd,
-								editable=True, **_textStyle)
-	gv.cmdLine = cmdLine						
+				searchPrefix='Command', 
+				histCmd=ch.deleteCurrentCmd,
+				editable=True, **_textStyle)
+	gv.cmdLine = cmdLine
 	cmdLine.bind('<Escape>', gv.app.cmdClear)
 	cmdLine.bind('<Return>', gv.app.runCmd)
 	ch.setHistoryBindings(cmdLine)
@@ -178,12 +178,12 @@ def _createWindows():
 	cmdbuttonFrame = ttk.Frame(cmdFrame, name=mu.TkName('cmdbuttonFrame'))
 	# make both buttons same width, len('Clear') + 2 spaces = 7
 	btnRun = ttk.Button(cmdbuttonFrame, text='Run', 
-								name=mu.TkName('btnRun'),
-								width=7, command=gv.app.runCmd)
+				name=mu.TkName('btnRun'),
+				width=7, command=gv.app.runCmd)
 	gv.btnRun = btnRun
 	btnCmdClr = ttk.Button(cmdbuttonFrame, text='Clear', 
-								name=mu.TkName('btnCmdClr'),
-								width=7, command=gv.app.cmdClear)
+				name=mu.TkName('btnCmdClr'),
+				width=7, command=gv.app.cmdClear)
 	gv.btnCmdClr = btnCmdClr
 
 	# row 1 is unoccupied; giving it weight makes it stretchy and the
@@ -210,8 +210,8 @@ def _createWindows():
 
 def _createAliasFrame():					# build alias frame
 	aliasWindow = wg.TopWindow(gv.root, title='Aliases', 
-								enduring=True, showNow=False, 
-								name=mu.TkName('aliasWindow'))
+				enduring=True, showNow=False, 
+				name=mu.TkName('aliasWindow'))
 	gv.aliasWindow = aliasWindow
 	aliasWindow.resizable(width=True, height=True)
 	aliasWindow.transient('') # override default in TopWindow
@@ -230,11 +230,11 @@ def _createAliasFrame():					# build alias frame
 								anchor='w', textvariable=gv.aliasMsgStr)
 	gv.aliasRegStr = tk.StringVar(name=mu.TkName('aliasRegStr'))
 	aliasRegLabel = ttk.Label(msgFrame, name=mu.TkName('aliasRegLabel'),
-								anchor='e', textvariable=gv.aliasRegStr)
+				anchor='e', textvariable=gv.aliasRegStr)
 
 	# ScrollingListBox has its own frame (.lbFrame)
 	aliasList = wg.ScrollingListBox(aliasPaned, gv.OoFonts['disabled'],
-									lbColumn=2, name=mu.TkName('aliasListBox'))
+				lbColumn=2, name=mu.TkName('aliasListBox'))
 	gv.aliasListBox = aliasList
 	# create column lines: this style has foreground and columns are
 	# gridded w/ spacing (see below)
@@ -244,13 +244,13 @@ def _createAliasFrame():					# build alias frame
 	# - in a groupAssociates list to keep movements synchronized
 	#   (see ScrollbarPopup)
 	polledList = tk.Listbox(aliasList.lbFrame, width=2,
-							name=mu.TkName('polledListBox'),
-							**con.LISTBOX_OPTIONS)
+				name=mu.TkName('polledListBox'),
+				**con.LISTBOX_OPTIONS)
 	gv.polledListBox = polledList
 
 	inMenuList = tk.Listbox(aliasList.lbFrame, width=2,
-							name=mu.TkName('inMenuListBox'),
-							**con.LISTBOX_OPTIONS)
+				name=mu.TkName('inMenuListBox'),
+				**con.LISTBOX_OPTIONS)
 	gv.inMenuListBox = inMenuList
 
 	gv.aliasListBoxes = [inMenuList, polledList, aliasList]
@@ -262,9 +262,9 @@ def _createAliasFrame():					# build alias frame
 	headerFrame = ttk.Frame(aliasFrame, name=mu.TkName('headerFrame'))
 	nameFrame = ttk.Frame(headerFrame, name=mu.TkName('nameFrame'))
 	aliasNameLabel = ttk.Label(nameFrame, 
-								name=mu.TkName('aliasNameLabel'),
-								relief='flat', text='Name:', 
-								justify='left', anchor='e')
+				name=mu.TkName('aliasNameLabel'),
+				relief='flat', text='Name:', 
+				justify='left', anchor='e')
 
 	_='''
 validate= specifies which events will trigger the routine, can be:
@@ -298,19 +298,19 @@ NB: if your validation alters either the Entry or textvariable, tkinter
 					'%d', '%i', '%S', '%s', '%P', '%v', '%V', '%W')
 	gv.aliasNameVar = tk.StringVar(name=mu.TkName('aliasNameVar'))
 	aliasNameEntry = ttk.Entry(nameFrame, name=mu.TkName('aliasNameEntry'),
-							   width=8, validate='key',
-							   textvariable=gv.aliasNameVar,
-							   validatecommand=setButtonState,
-							   **con.ENTRY_OPTIONS)
+				width=8, validate='key',
+				textvariable=gv.aliasNameVar,
+				validatecommand=setButtonState,
+				**con.ENTRY_OPTIONS)
 	gv.aliasNameEntry = aliasNameEntry
 
 	tipDelay = gv.CurrentOptions['Settings'].get('FindToolTipDelayMS', 0)
 
 	pollCheck = ttk.Button(headerFrame, compound='left',
-								name=mu.TkName('aliasPollCheck'),
-								style='pollingAlias.TButton',
-								image=gv.OoBitmaps[con.ALIASPOLLINGTEXT[None]['image']],
-								command=al.toggleAliasPoll)
+				name=mu.TkName('aliasPollCheck'),
+				style='pollingAlias.TButton',
+				image=gv.OoBitmaps[con.ALIASPOLLINGTEXT[None]['image']],
+				command=al.toggleAliasPoll)
 	pollCheck.state(['disabled'])
 	gv.aliasPollCheck = pollCheck
 
@@ -320,16 +320,16 @@ NB: if your validation alters either the Entry or textvariable, tkinter
 	font = gv.OoFonts['default']
 	zeroLen = font.measure('0')
 	maxTextWidth = max(1 + (font.measure(spec['text'])) // zeroLen
-	 				   for spec in con.ALIASPOLLINGTEXT.values())
+		for spec in con.ALIASPOLLINGTEXT.values())
 	# - a bit too narrow so +1
 	pollCheck.config(width=maxTextWidth)
 	al.setAliasPollButton()	
 
 	gv.aliasButtonFrames = [] # created on demand, see setNumButtonFrames
 	asButton = ttk.Button(headerFrame, compound='left',
-								name=mu.TkName('aliasAsButton'),
-								style='aliasInMenu.TButton',
-								command=al.toggleAliasInMenu)
+				name=mu.TkName('aliasAsButton'),
+				style='aliasInMenu.TButton',
+				command=al.toggleAliasInMenu)
 	asButton.state(['disabled'])
 	gv.aliasAsButton = asButton
 	maxTextWidth = max(1 + (font.measure(spec['text'])) // zeroLen
@@ -340,10 +340,10 @@ NB: if your validation alters either the Entry or textvariable, tkinter
 
 	# row 2 - ScrollingText has its own frame (.frame)
 	aliasDefn = wg.ScrollingText(aliasFrame, name=mu.TkName('aliasDefn'),
-								searchPrefix='Alias', insertwidth=4, 
-								relief='ridge', padx=2, editable=True, 
-								tabs=font.measure(' ' * con.CFG_TAB_LENGTH),
-								tabstyle='wordprocessor', **_textStyle)
+				searchPrefix='Alias', insertwidth=4, 
+				relief='ridge', padx=2, editable=True, 
+				tabs=font.measure(' ' * con.CFG_TAB_LENGTH),
+				tabstyle='wordprocessor', **_textStyle)
 	gv.aliasDefn = aliasDefn
 	gv.textWidgets.append(aliasDefn)
 	aliasDefn.edit_modified(False)
@@ -364,25 +364,25 @@ NB: if your validation alters either the Entry or textvariable, tkinter
 	# row 3
 	gv.aliasValueVar = tk.StringVar(name=mu.TkName('aliasValueVar'))
 	aliasValue = ttk.Label(aliasFrame, anchor='w', width=40, 
-								name=mu.TkName('aliasValueVar'),
-								style='alias.TLabel', 
-								textvariable=gv.aliasValueVar)
+				name=mu.TkName('aliasValueVar'),
+				style='alias.TLabel', 
+				textvariable=gv.aliasValueVar)
 	gv.aliasValueLabel = aliasValue
 
 	# row 4
 	buttonFrame = ttk.Frame(aliasFrame, name=mu.TkName('buttonFrame'))
 	addBtn = ttk.Button(buttonFrame, name=mu.TkName('aliasAddBtn'),
-								text='Add', command=al.aliasAdd)
+				text='Add', command=al.aliasAdd)
 	gv.aliasAddBtn = addBtn
 	delBtn = ttk.Button(buttonFrame, name=mu.TkName('aliasDelBtn'),
-								text='Delete',
-								command=al.aliasDelete)
+				text='Delete',
+				command=al.aliasDelete)
 	gv.aliasDelBtn = delBtn
 	undoBtn = ttk.Button(buttonFrame, name=mu.TkName('aliasUndoBtn'),
-								text='Undo', command=al.aliasUndo)
+				text='Undo', command=al.aliasUndo)
 	gv.aliasUndoBtn = undoBtn
 	redoBtn = ttk.Button(buttonFrame, name=mu.TkName('aliasRedoBtn'),
-								text='Redo', command=al.aliasRedo)
+				text='Redo', command=al.aliasRedo)
 	gv.aliasRedoBtn = redoBtn
 
 	# main/bigger widgets should be packed/gridded last
@@ -405,15 +405,15 @@ NB: if your validation alters either the Entry or textvariable, tkinter
 	pollCheck.grid(			row=0, column=1, 				padx=2)
 	asButton.grid(			row=0, column=2, sticky='e', 	padx=2)
 
-	buttonFrame.columnconfigure(		0, 	weight=1)	# evenly space buttons
-	buttonFrame.columnconfigure(		1, 	weight=1)
-	buttonFrame.columnconfigure(		2, 	weight=1)
-	buttonFrame.columnconfigure(		3, 	weight=1)
+	buttonFrame.columnconfigure(0, weight=1)	# evenly space buttons
+	buttonFrame.columnconfigure(1, weight=1)
+	buttonFrame.columnconfigure(2, weight=1)
+	buttonFrame.columnconfigure(3, weight=1)
 	# in buttonFrame
-	delBtn.grid(			row=0, column=0, 				padx=2, pady=2)
-	redoBtn.grid(			row=0, column=1, 				padx=2, pady=2)
-	undoBtn.grid(			row=0, column=2, 				padx=2, pady=2)
-	addBtn.grid(			row=0, column=3, 				padx=2, pady=2)
+	delBtn.grid(	row=0, column=0, padx=2, pady=2)
+	redoBtn.grid(	row=0, column=1, padx=2, pady=2)
+	undoBtn.grid(	row=0, column=2, padx=2, pady=2)
+	addBtn.grid(	row=0, column=3, padx=2, pady=2)
 
 	aliasFrame.rowconfigure(			2,	weight=1)	# 2 is aliasDefn (Text) widget
 	aliasFrame.columnconfigure(			1,	weight=1)
@@ -483,7 +483,7 @@ def _leaveAliasList(event=None):
 	return 'break'
 
 def _bindAliasListBoxes():
-	gv.aliasListBox.bind('<Return>', al.editAlias)		
+	gv.aliasListBox.bind('<Return>', al.editAlias)
 	gv.polledListBox.bind('<Return>', al.toggleAliasPoll)
 	gv.inMenuListBox.bind('<Return>', al.toggleAliasInMenu)
 	for box in gv.aliasListBoxes:

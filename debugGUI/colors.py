@@ -10,29 +10,18 @@ import debugGUI.widgets as wg
 
 ## utility functions ##########################################################
 
-def sameColor(c1, c2):					
-	# return true if all r,g,b components are 
-	# within con.COLOR_TOLERANCE
-	if c1 == c2:
-		return True
+def sameColor(c1, c2):
+	# return true if colours match
 	if not c1.startswith('#'):
 		c1 = gv.Appearance.codifyColor(c1)
 	if not c2.startswith('#'):
 		c2 = gv.Appearance.codifyColor(c2)
-	red1, red2 = int(c1[1:3], base=16), int(c2[1:3], base=16)
-	grn1, grn2 = int(c1[3:5], base=16), int(c2[3:5], base=16)
-	blu1, blu2 = int(c1[5:7], base=16), int(c2[5:7], base=16)
-	dRed = abs(red1 - red2)
-	dGrn = abs(grn1 - grn2)
-	dBlu = abs(blu1 - blu2)
-	margin = con.COLOR_TOLERANCE
-	if abs(red2 - grn2) <= 2 and abs(grn2 - blu2) <= 2  \
-			and abs(blu2 - red2) <= 2:
-		margin = 3					# for Tkinter's gray levels
-	return dRed <= margin and dGrn <= margin and dBlu <= margin
+	if ( c1 == c2 ):
+		return True
+	return False
 
-def _findOoColor(color):				
-	# return Oolite color str if 'color' is a close match
+def _findOoColor(color):
+	# return Oolite color str if 'color' is a match
 	oocolor = gv.Appearance.codifyColor(color)
 	if oocolor:
 		for k, v in con.OOCOLORS.items():
@@ -40,8 +29,8 @@ def _findOoColor(color):
 				return k
 	return None
 
-def findTkColor(color):					
-	# return a Tk color str if 'color' is a close match
+def findTkColor(color):
+	# return a Tk color str if 'color' is identical
 	tkColor = gv.Appearance.codifyColor(color)
 	if tkColor:
 		for k, v in con.TKCOLORS.items():
@@ -232,22 +221,21 @@ def _setSpinboxColors():
 
 ## user specified colors ######################################################
 
-def pickLocalColor(key):				
+def pickLocalColor(key):
 	# use tkColorChooser to set a local debug console color
 	color = gv.CurrentOptions['Colors'].get(key,
-					con.defaultConfig['Colors'][key.capitalize()])
+				con.defaultConfig['Colors'][key.capitalize()])
 	color = gv.Appearance.codifyColor(color)
 	# askcolor returns color as a 3-tuple with
 	# floats from 0 to 255.99609375 and as
 	# a string '#0088ff' (ie. hex doublets)
-	newColor, newCStr = tkColorChooser.askcolor(color=color,
-								parent=gv.root, title=key)
+	newColor, newCStr = tkColorChooser.askcolor(color=color, parent=gv.root, title=key)
 	if newColor is None or sameColor(color, newCStr):
 		return
 	gv.CurrentOptions['Colors'][key] = findTkColor(newCStr) or newCStr
-	gv.appearance.updateApp()		
+	gv.appearance.updateApp()
 
-def _setTextTagsColors(key, value):		
+def _setTextTagsColors(key, value):
 	# apply local color to app widgets
 	color = gv.Appearance.codifyColor(value)
 	# assign local colors for foreground, background, 
@@ -256,26 +244,20 @@ def _setTextTagsColors(key, value):
 		for text in gv.textWidgets:
 			if text is gv.cmdLine:	# its colors unique to debug console
 				continue
-			text.config(foreground=color,
-							insertbackground=color) # cursor color
-			text.tag_config('general-foreground', 
-								foreground=color)
+			text.config(foreground=color, insertbackground=color) # cursor color
+			text.tag_config('general-foreground', foreground=color)
 	elif key == 'general-background':
 		for text in gv.textWidgets:
 			if text is gv.cmdLine:	# its colors unique to debug console
 				continue
 			text.config(background=color)
-			text.tag_config('general-foreground', 
-								background=color)
+			text.tag_config('general-foreground', background=color)
 	elif key == 'command-foreground':
-		gv.cmdLine.config(foreground=color,
-							insertbackground=color) # cursor color
-		gv.bodyText.tag_config('command', 
-								foreground=color)
+		gv.cmdLine.config(foreground=color, insertbackground=color) # cursor color
+		gv.bodyText.tag_config('command', foreground=color)
 	elif key == 'command-background':
 		gv.cmdLine.config(background=color)
-		gv.bodyText.tag_config('command', 
-								background=color)
+		gv.bodyText.tag_config('command', background=color)
 	elif key == 'select-foreground':
 		for text in gv.textWidgets:
 			text.config(selectforeground=color)
@@ -284,27 +266,25 @@ def _setTextTagsColors(key, value):
 				text.tag_config('fileSearch', foreground=color)
 	elif key == 'select-background':
 		for text in gv.textWidgets:
-			text.config(selectbackground=color, 
-						inactiveselectbackground=color)
+			text.config(selectbackground=color, inactiveselectbackground=color)
 			text.tag_config('sel', background=color)
 			if text is gv.contextText:
 				text.tag_config('fileSearch', background=color)
 
-def pickMsgColor(key):					
+def pickMsgColor(key):
 	# use tkColorChooser to set an Oolite color
 	# (OoSettings' colors are codifyColor'd)
 	cvalue = gv.OoSettings[key]		
 	# askcolor returns color as a 3-tuple with
 	# floats from 0 to 255.99609375 and as
 	# a string '#0088ff' (ie. hex doublets)
-	newColor, newCStr = tkColorChooser.askcolor(color=cvalue,
-								parent=gv.root, title=key)
+	newColor, newCStr = tkColorChooser.askcolor(color=cvalue, parent=gv.root, title=key)
 	if newColor is None or sameColor(cvalue, newCStr):
 		return
 	ooColor = _findOoColor(newCStr)
 	if ooColor is None:
 		newRGB = list(map(int, newColor))
-		newRGB.append(255) 				# alpha
+		newRGB.append(255) 	# alpha
 		finalColor = newRGB
 	else:
 		finalColor = ooColor
@@ -312,18 +292,18 @@ def pickMsgColor(key):
 	# which in turn calls applyMsgColor()
 	gv.app.client.setConfigurationValue(key, finalColor)
 
-def applyMsgColor(key, value): 			
+def applyMsgColor(key, value):
 	# apply new Oolite color to app widgets
-	gv.OoSettings[key] = value 
+	gv.OoSettings[key] = value
 	setMsgColor(key, value)
-	if len(gv.ooliteColors) > 0:		
+	if len(gv.ooliteColors) > 0:
 		# not finished processing Oolite colors from connection dict
 		return
-	if gv.appearance.usingOoColors():		
-		gv.appearance.updateApp()		
+	if gv.appearance.usingOoColors():
+		gv.appearance.updateApp()
 
 _colorMatches = {}	# regex matches performed on OoSettings 
-def parseOoColorKey(key):				
+def parseOoColorKey(key):
 	# parse color string and memoize result
 	colParse = _colorMatches.get(key)
 	if colParse:
@@ -369,24 +349,24 @@ def setMsgColor(key, color, skipUpdate=False):
 
 ## color support colorPrint() #################################################
 
-def setColorKey(key): 					
+def setColorKey(key):
 	# return key or None for Text output
 	if key == 'dumpObject':
 		# bug in oolite-debug-console.js, function dumpObject()
-		key = 'general-foreground' 		
+		key = 'general-foreground'
 	elif key == 'debugger':
-		key = 'general-foreground' 		# msg from debugger
+		key = 'general-foreground'	# msg from debugger
 	key = key.lower() if key else 'general-foreground'
 	if key == 'macro-expansion' \
 			and gv.localOptnVars['MacroExpansion'].get() == 0:
-		return None						# suppress print
+		return None				# suppress print
 	elif key == 'log':
 		if gv.debugOptions['showLog'].get() > 0:
 			colorKeys = gv.CurrentOptions['Colors'].keys()
 			key = 'general-foreground' \
 					if key not in colorKeys else key
 		else:
-			return None					# suppress print
+			return None			# suppress print
 	return key
 
 # local colors use: 
@@ -394,7 +374,7 @@ def setColorKey(key):
 #	'command-foreground' in place of 'command' & 'command-result'
 # - 2 'select' colors are debug console only and always used
 # when 'PlistOverrides', use OoSettings colors if possible
-def setColorTag(key): 					
+def setColorTag(key):
 	# return appropriate tag for 'key' to output to Text
 	if not gv.appearance.usingOoColors():
 		if key in ['general', 'command', 'select']:
@@ -408,5 +388,4 @@ def setColorTag(key):
 	if key + '-background-color' in gv.OoSettings:
 		return key
 	# fall-back color if no match found
-	return 'general-foreground'			
-
+	return 'general-foreground'
