@@ -1464,9 +1464,8 @@ def runConsole():
 		# (required global for SimpleConsoleDelegate)
 		_consoleHandler = OoliteDebugCLIProtocol()
 		stdio.StandardIO(_consoleHandler)
-
-		gv.root.attributes('-alpha', 1.0)
 		gv.root.deiconify()
+		gv.root.attributes('-alpha', 1.0)
 		gv.setupComplete = True
 		gc.collect()
 
