@@ -109,12 +109,12 @@ jobs:
          --clean `
          --log-level=WARN `
          --onefile `
-         --name OoDebugConsole `
+         --name OoDC `
          --add-binary "OoJSC.ico:." `
          --add-binary "oojsc.xbm:." `
          --noconsole `
          --icon=OoJSC.ico `
-         DebugConsole.py
+         OoDC.py
 
     #      --version-file=OoDebug_version_info.txt `
     #      --paths "C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x86"  `
@@ -156,8 +156,9 @@ jobs:
         --onefile \
         --add-binary "oojsc.xbm:." \
         --add-binary "OoJSC.ico:." \
+        --name OoDC \
         --icon OoJSC.ico \
-        DebugConsole.py
+        OoDC.py
 
     - name: create archive
       run: |
