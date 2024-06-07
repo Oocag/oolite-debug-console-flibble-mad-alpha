@@ -225,6 +225,7 @@ class AppWindow(ttk.Frame):
 		top = gv.root = tk.Tk(className='Oodebug')
 		gv.monitorsWidth = top.winfo_screenwidth()
 		gv.monitorsHeight = top.winfo_screenheight()
+		print('DEBUG: Max window size ' + str(gv.monitorsWidth) + "x" + str(gv.monitorsHeight) + ' (Across all connected monitors).')
 		top.withdraw() #flibble: this and the update seem to effectively hide the window
 		top.update()   #  during construction.
 		top.minsize(con.MINIMUM_WIDTH, con.MINIMUM_HEIGHT)
