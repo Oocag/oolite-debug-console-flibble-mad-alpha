@@ -70,7 +70,6 @@ import debugGUI.stringUtils as su
 import debugGUI.widgets as wg
 
 
-
 ## module variables ###########################################################
 
 if con.IS_WINDOWS_PC and sys.executable.endswith('pythonw.exe'):
@@ -224,6 +223,8 @@ class AppWindow(ttk.Frame):
 	# noinspection PyBroadException
 	def __init__(self):
 		top = gv.root = tk.Tk(className='Oodebug')
+		gv.monitorsWidth = top.winfo_screenwidth()
+		gv.monitorsHeight = top.winfo_screenheight()
 		top.withdraw() #flibble: this and the update seem to effectively hide the window
 		top.update()   #  during construction.
 		top.minsize(con.MINIMUM_WIDTH, con.MINIMUM_HEIGHT)
@@ -297,7 +298,7 @@ class AppWindow(ttk.Frame):
 		gv.root.attributes('-alpha', 0.0)	# turn off while building
 #		gv.root.update_idletasks()
 		gv.root.update()
-		au.monitorResolutions()
+#		au.monitorResolutions() # Flibble removing this to try simpler method
 
 		# upper Frame
 		gv.menubar.rowconfigure(0, weight=1)
