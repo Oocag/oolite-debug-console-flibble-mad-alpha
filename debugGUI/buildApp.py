@@ -859,7 +859,7 @@ def _initFindOptions():
 	if values is not None and values[0] == con.NO_SELECTION:
 		values = [value for value in values
 				   if value != con.NO_SELECTION]
-		settings[listTag] = values
+		settings['FindPaths'] = values
 		setEntry = False
 	if values is None or len(values) == 0:
 		values = _findOoliteDirs()
