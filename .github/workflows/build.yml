@@ -112,10 +112,10 @@ jobs:
          --name OoDC `
          --add-binary "OoJSC.ico:." `
          --add-binary "oojsc.xbm:." `
-         --noconsole `
          --icon=OoJSC.ico `
          OoDC.py
 
+    # Flibble ripped out the --noconsole option to pyinstaller to be able to get stdout
     #      --version-file=OoDebug_version_info.txt `
     #      --paths "C:\Program Files (x86)\Windows Kits\10\Redist\ucrt\DLLs\x86"  `
     #      --noupx `
