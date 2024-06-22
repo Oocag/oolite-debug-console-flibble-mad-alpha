@@ -194,21 +194,17 @@ def _saveComments(obj, string, index):
 		if string[cmtIdx:].isspace():  # preserve whitespace
 			obj.addComment(string[cmtIdx:], index + cmtIdx - obj.location)
 			return index + len(string)
-		endLine = rx.ENDLINE_CMT_RE.match(string, cmtIdx)
+		endLine = rx.ENDLINE_CMT_RE.search(string, cmtIdx)
 		if endLine:  # captures leading WS and any trailing NLs
 			start, cmtIdx = endLine.span('eolCmt')
 			obj.addComment(string[start:cmtIdx], index + start - obj.location)
 			continue
-		inLine = rx.INLINE_CMT_RE.match(string, cmtIdx)
+		inLine = rx.INLINE_CMT_RE.search(string, cmtIdx)
 		if inLine:  # captures leading WS and any trailing NLs
 			start, cmtIdx = inLine.span('inlineCmt')
 			obj.addComment(string[start:cmtIdx], index + start - obj.location)
 			continue
-		print('_saveComments, failed to parse comment at index {} + {}: {!r} <> {!r}'
-			  .format(index, cmtIdx, string[0:cmtIdx], string[cmtIdx:]))
-		if con.CAGSPC:
-			pdb.set_trace()
-		break  # safety valve, should never execute
+		break
 	return index + cmtIdx
 
 def _coerceValue(name, string, default):
@@ -280,7 +276,7 @@ def _createAlias(alias, location):
 def _readAliases(sectionObj, string, index):
 	try:
 		while su.inbounds(index, string):
-			name = rx.ALIAS_NAME_RE.match(string, index)
+			name = rx.ALIAS_NAME_RE.search(string, index)
 			if name:
 				match = rx.POLLING_RE.match(string, name.end())
 				if match:
@@ -288,8 +284,12 @@ def _readAliases(sectionObj, string, index):
 					sectionObj.addOption(name['name'], obj)
 					mu.parsePollFlags(obj, match)
 					obj.pollRead = obj.polled
-					index = _saveComments(obj, match['aliasTail'],
-										  match.end('aliasDefn'))
+					# _saveComments does double duty catching those for options as well
+					# - here we ignore the return as the match gives us the start of
+					#   next alias vs the end of the comment(s)
+					_ = _saveComments(obj, match['aliasDefn'],
+										match.end('aliasDefn'))
+					index = match.end('aliasDefn')
 				else:
 					msg = f'failed to read defn, index: {index}'
 					gv.debugLogger.error(msg)

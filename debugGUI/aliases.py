@@ -832,6 +832,8 @@ def aliasAdd():							# handler for 'Add' button
 		obj.register = con.ALIAS_SUSPENDED
 		if alias in _pollQueue:	# remove from queue
 			_pollQueue.remove(alias)
+		# call something that checks comments for tooltip
+		_makeAliasMenuButton(alias)
 	if len(inText) > 0:
 		_aliasDBinsert(alias, inText, isNew)
 	else: # executing a blank definition may be an attempt to delete
@@ -2011,6 +2013,8 @@ def _makeAliasMenuButton(alias):		# build alias menu button
 		# aliasButtonFrames is also in_ gv.menubar
 		gv.aliasMenuButtons[alias] = obj.createBtn(gv.menubar)
 		if len(obj.comments) > 0:
+			if alias == 'addCon':
+				print('_makeAliasMenuButton, ', alias, 'first comment is MISSING!')
 			for cmt in obj.comments:
 				lowText = cmt.text.lower()
 				slash = lowText.find('/')
