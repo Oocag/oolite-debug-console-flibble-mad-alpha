@@ -9,6 +9,7 @@
 from .PropertyListPacketProtocol import PropertyListPacketProtocol
 import ooliteConsoleServer._protocol as P
 
+import sys
 import logging
 consoleLogger = logging.getLogger('DebugConsole.ODCProtocol')
 

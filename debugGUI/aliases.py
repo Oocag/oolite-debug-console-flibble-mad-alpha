@@ -2013,15 +2013,13 @@ def _makeAliasMenuButton(alias):		# build alias menu button
 		# aliasButtonFrames is also in_ gv.menubar
 		gv.aliasMenuButtons[alias] = obj.createBtn(gv.menubar)
 		if len(obj.comments) > 0:
-			if alias == 'addCon':
-				print('_makeAliasMenuButton, ', alias, 'first comment is MISSING!')
 			for cmt in obj.comments:
 				lowText = cmt.text.lower()
 				slash = lowText.find('/')
 				tag = lowText.find(con.ALIAS_TOOLTIP, slash + 2)
 				if -1 < tag:
 					isInline = lowText.find('*', slash) == slash + 1
-					tipEnd = lowText.find('*', slash + 2) if isInline else None
+					tipEnd = lowText.find('*/', slash + 2) if isInline else None
 					msg = cmt.text[tag + len(con.ALIAS_TOOLTIP):tipEnd].strip()
 					wg.ToolTip(obj.button, msg,
 						gv.CurrentOptions['Settings'].get('FindToolTipDelayMS', 0),
@@ -2054,7 +2052,7 @@ def _setAliasButtonCmd(alias):			# set cmd invoked when menubar button pressed
 			cmd = lambda: gv.app.queueImmediateCmd(cStr, label, discard=False)
 			# - not discarded to trap for Exceptions
 	else:
-		cmd = lambda: gv.cmdLine.insert('insert', obj.defn)
+		cmd = lambda: gv.cmdLine.insert('insert', su.stripComments(obj.defn))
 	button.config(command=cmd)
 	obj.configMenuBtn()
 

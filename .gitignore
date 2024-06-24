@@ -17,7 +17,14 @@ build/
 dist/
 
 # VS code
-launch.json
-.vscode/settings.json
+*/launch.json
+*/settings.json
+
+# NotePad++ cruft
+*/nppBackup/
+
+# OoDC cruft
 *.cfg
-DebugConsole.cags.cfg
+*.log
+*.dat
+

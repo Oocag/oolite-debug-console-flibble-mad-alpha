@@ -195,11 +195,17 @@ def _saveComments(obj, string, index):
 			obj.addComment(string[cmtIdx:], index + cmtIdx - obj.location)
 			return index + len(string)
 		endLine = rx.ENDLINE_CMT_RE.search(string, cmtIdx)
+		inLine = rx.INLINE_CMT_RE.search(string, cmtIdx)
+		eStart = endLine.start() if endLine else -1
+		iStart = inLine.start() if inLine else -1
+		if eStart > iStart > -1:
+			endLine = None
+		elif iStart >eStart > -1:
+			inLine = None
 		if endLine:  # captures leading WS and any trailing NLs
 			start, cmtIdx = endLine.span('eolCmt')
 			obj.addComment(string[start:cmtIdx], index + start - obj.location)
 			continue
-		inLine = rx.INLINE_CMT_RE.search(string, cmtIdx)
 		if inLine:  # captures leading WS and any trailing NLs
 			start, cmtIdx = inLine.span('inlineCmt')
 			obj.addComment(string[start:cmtIdx], index + start - obj.location)
